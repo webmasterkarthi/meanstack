@@ -10,10 +10,12 @@ router.get('/', function(req, res) {
 
 router.post('/saveuser', require('../controllers/UserController').saveUser);
 
-router.get('/getUser', require('../controllers/UserController').getUser);
+router.post('/updateUser', require('../controllers/UserController').updateUser);
+
+router.post('/getUser', require('../controllers/UserController').getUser);
 
 router.get('/listUsers', require('../controllers/UserController').listUsers);
 
-router.get('/deleteUser', require('../controllers/UserController').deleteUser);
+router.post('/deleteUser', require('../controllers/UserController').deleteUser);
 
 module.exports=router;

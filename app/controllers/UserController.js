@@ -15,23 +15,27 @@ var saveUser=function(req, res) {
 	res.json({"message":"success"});		
 	});
 }
+var updateUser=function(req,res){
+	User.findOneAndUpdate({_id:req.body._id}, req.body, function (err, place) {
+		res.send({"message":"success"});
+	});;
+}
 var getUser=function(req, res) {
-	var uid=req.uid;
+	var uid=req.body.uid;
 	User.findById(uid, function (err, doc){
 		res.json(doc);
 	});
 }
 var deleteUser=function(req, res) {
-	var uid=req.uid;
-	User.findById(uid, function (err, doc){
-		res.json(doc);
-	});
+	var uid=req.body.uid;
+	User.find({ _id:uid }).remove().exec();
+	res.json({"message":"success"});
 }
 var listUsers=function(req, res) {
 	
 		User.find({},function(err,doc){
-			res.json(doc);
+			res.json({"users":doc});
 		});
 	
 }
-module.exports={saveUser,getUser,deleteUser,listUsers};
+module.exports={saveUser:saveUser,updateUser:updateUser,getUser:getUser,deleteUser:deleteUser,listUsers:listUsers};
