@@ -12,15 +12,9 @@
   "author": "datacaliper",
   "contributors": [],
   "dependencies": {
-<<<<<<< HEAD
     "body-parser": "^1.15.2",
     "connect-multiparty": "^2.0.0",
     "express": "^4.8.1",
     "mongoose": "^3.8.0"
-=======
-    "express": "^4.8.1",
-    "mongoose": "^3.8.0",
-	"body-parser":"^1.15.2"
->>>>>>> 192d0e20fcf627d522346717de50ea9f44077216
   }
 }
