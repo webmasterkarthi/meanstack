@@ -28,3 +28,7 @@ app.use('/',require('./app/routes/routes'));
 app.listen(8080);
 
 module.exports = app;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 192d0e20fcf627d522346717de50ea9f44077216

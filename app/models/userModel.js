@@ -8,8 +8,12 @@ var userSchema = new Schema({
   lname: String,
   email: String,
   password: String,
+<<<<<<< HEAD
   created_at: Date,
   img:{ data: Buffer, contentType: String }
+=======
+  created_at: Date
+>>>>>>> 192d0e20fcf627d522346717de50ea9f44077216
 });
 
 // the schema is useless so far
