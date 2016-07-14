@@ -8,7 +8,8 @@ var userSchema = new Schema({
   lname: String,
   email: String,
   password: String,
-  created_at: Date
+  created_at: Date,
+  img:{ data: Buffer, contentType: String }
 });
 
 // the schema is useless so far

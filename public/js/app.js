@@ -1,6 +1,6 @@
-var app=angular.module('CrudApp',[]);
+var app=angular.module('CrudApp',['ngFileUpload']);
 
-app.controller('mainController',['$scope','$http',function($scope,$http){
+app.controller('mainController',['$scope','$http','Upload',function($scope,$http,Upload){
 	$http({
 		method  : 'GET',
 		url     : '/listUsers',
@@ -16,7 +16,25 @@ app.controller('mainController',['$scope','$http',function($scope,$http){
 	$scope.submit= function() {
 		// check to make sure the form is completely valid
 		if ($scope.registerform.$valid && $scope.operation!=1) {
-			$http({
+			Upload.upload({
+				url: '/saveuser', //upload.php script, node.js route, etc..
+				method: 'POST', //Post or Put
+				headers: {'Content-Type': 'multipart/form-data'},
+				//withCredentials: true,
+				data: $scope.user, //from data to send along with the file
+				file: $scope.file, // or list of files ($files) for html5 only
+				//fileName: 'photo' // to modify the name of the file(s)
+			}).then(function (resp) {
+
+				console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+			}, function (resp) {
+				console.log('Error status: ' + resp.status);
+			}, function (evt) {
+				var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+				$scope.progress = progressPercentage;
+			});
+
+			/*$http({
 				method  : 'POST',
 				url     : '/saveuser',
 				data    : $scope.user, //forms user object
@@ -30,7 +48,7 @@ app.controller('mainController',['$scope','$http',function($scope,$http){
             } else {
               $scope.message = data.message;
             }
-          });
+          });*/
 		}else if($scope.registerform.$valid && $scope.operation==1){
 			$http({
 				method  : 'POST',
