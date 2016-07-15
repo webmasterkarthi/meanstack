@@ -2,27 +2,68 @@
 var  User=require('../models/userModel').User;
 var multiparty = require('multiparty');
 var fs=require('fs');
+var qs = require('querystring');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/meanstudy');
+var conn = mongoose.connection;
+
+
+var Grid = require('gridfs-stream');
+Grid.mongo = mongoose.mongo;
+
+var gfs = Grid(conn.db);
+
+/*Write File to grid */
+/*
+var writestream = gfs.createWriteStream({
+	filename: 'mongo_file.txt'
+});
+fs.createReadStream('/home/etech/sourcefile.txt').pipe(writestream);
+
+writestream.on('close', function (file) {
+	// do something with `file`
+	console.log(file.filename + 'Written To DB');
+}); */
+
 
 var saveUser=function(req, res) {
 
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files) {
-		var newuser = new User({
-			fname: fields['fname'][0],
-			lname: fields['lname'][0],
-			email:fields['email'][0],
-			password:fields['pass'][0],
-			img:{data:fs.readFileSync(files['file'][0]['path']),contentType:'image/png'}
-		});
-		newuser.save(function(err) {
-			if (err) throw err;
 
-			res.json({"message":"success"});
+
+
+		var writestream = gfs.createWriteStream({
+			filename: files['docs'][0]['originalFilename']
 		});
+		fs.createReadStream(files['docs'][0]['path']).pipe(writestream);
+
+		writestream.on('close', function (file) {
+			var newuser = new User({
+				fname: fields['user[fname]'][0],
+				lname: fields['user[lname]'][0],
+				email: fields['user[email]'][0],
+				password:fields['user[pass]'][0],
+				img:{data:fs.readFileSync(files['file'][0]['path']),contentType:'image/png'},
+				docs:{docid:file._id,docname:files['docs'][0]['originalFilename']}
+			});
+			newuser.save(function(err) {
+				if (err) throw err;
+				res.json({"message":"success"});
+			});
+		});
+
+
 				//console.log(files);
 
 			//console.log(fields['fname']);
 			//console.log(files['file'][0]['path']);
+			//console.log(files['docs'][0]['path']);
+
+
+		//console.log(fields['user[fname]'][0]);
+		//console.log(files['docs']['originalFilename']);
 	});
 
 	/*var newuser = new User({
@@ -52,6 +93,7 @@ var getUser=function(req, res) {
 		doc.img=thumb;
 		res.json(doc);
 	});
+
 }
 var deleteUser=function(req, res) {
 	var uid=req.body.uid;
@@ -60,7 +102,7 @@ var deleteUser=function(req, res) {
 }
 var listUsers=function(req, res) {
 	
-		User.find({},function(err,doc){
+		User.find({},'-img',function(err,doc){
 			res.json({"users":doc});
 		});
 	

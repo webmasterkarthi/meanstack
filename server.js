@@ -3,13 +3,13 @@
 var express        = require('express');
 var path = require('path');
 var bodyParser= require('body-parser'); 
-var mongoose = require('mongoose');
+//var mongoose = require('mongoose');
 
 var app            = express();
 
 /*Connect to db*/
 
-mongoose.connect('mongodb://localhost:27017/meanstudy');
+//mongoose.connect('mongodb://localhost:27017/meanstudy');
 
 /*Get Static Content from Public folder */
 

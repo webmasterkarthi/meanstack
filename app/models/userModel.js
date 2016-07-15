@@ -9,7 +9,8 @@ var userSchema = new Schema({
   email: String,
   password: String,
   created_at: Date,
-  img:{ data: Buffer, contentType: String }
+  img:{ data: Buffer, contentType: String },
+  docs:[{docid:String,docname:String}]
 });
 
 // the schema is useless so far
